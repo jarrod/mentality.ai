@@ -1,10 +1,21 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { ComponentExample } from "@/components/component-example";
+import { SignedIn, SignedOut, SignInButton, SignOutButton, SignUpButton, UserButton } from "@clerk/tanstack-react-start";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/")({ component: App });
+export const Route = createFileRoute("/")({
+  component: App
+});
 
 function App() {
-return (
-  <ComponentExample />
-);
+  return (
+    <div>
+      <SignedIn>
+        <UserButton />
+        <SignOutButton />
+      </SignedIn>
+      <SignedOut>
+        <SignInButton />     </SignedOut>
+      <ComponentExample />
+    </div>
+  );
 }
