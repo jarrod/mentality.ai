@@ -1,8 +1,7 @@
 import { InferenceItem } from '@/components/inference-item'
 import { createFileRoute } from '@tanstack/react-router'
 
-
-export const Route = createFileRoute('/_auth/dashboard')({
+export const Route = createFileRoute('/_auth/admin/dashboard')({
   loader: async ({ context }) => {
     return { userId: context.userId, isAuthenticated: context.isAuthenticated }
   },
@@ -10,11 +9,9 @@ export const Route = createFileRoute('/_auth/dashboard')({
 })
 
 function RouteComponent() {
-
   return (
     <div className='p-4'>
       <InferenceItem />
     </div>
   )
 }
-

@@ -36,17 +36,9 @@ import {
   SidebarMenuItem
 } from '@/components/ui/sidebar'
 
-const items = [
-  {
-    title: 'Home',
-    to: '/admin',
-    icon: LayoutDashboard,
-  },
-  {
-    title: 'Chats',
-    to: '/chats',
-    icon: MessageCircleDashed,
-  },
+const allItems = [
+  { title: 'Dashboard', to: '/admin/dashboard', icon: LayoutDashboard, adminOnly: true },
+  { title: 'Assist', to: '/assist', icon: MessageCircleDashed, adminOnly: false },
 ]
 
 /** Minimal user shape for sidebar display (auth-agnostic). */
@@ -58,10 +50,12 @@ export interface SidebarUser {
 
 interface AppSidebarProps {
   user: SidebarUser
+  isAdmin?: boolean
 }
 
-export function AppSidebar({ user }: AppSidebarProps) {
+export function AppSidebar({ user, isAdmin = false }: AppSidebarProps) {
   const navigate = useNavigate()
+  const items = allItems.filter((item) => !item.adminOnly || isAdmin)
 
   const handleLogout = () => {
     navigate({ to: '/' })

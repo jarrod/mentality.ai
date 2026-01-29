@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthDashboardRouteImport } from './routes/_auth.dashboard'
+import { Route as AuthAssistRouteImport } from './routes/_auth.assist'
+import { Route as AuthAdminRouteImport } from './routes/_auth.admin'
+import { Route as AuthAdminDashboardRouteImport } from './routes/_auth.admin.dashboard'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -28,35 +30,58 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthDashboardRoute = AuthDashboardRouteImport.update({
+const AuthAssistRoute = AuthAssistRouteImport.update({
+  id: '/assist',
+  path: '/assist',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthAdminRoute = AuthAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthAdminDashboardRoute = AuthAdminDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => AuthRoute,
+  getParentRoute: () => AuthAdminRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/dashboard': typeof AuthDashboardRoute
+  '/admin': typeof AuthAdminRouteWithChildren
+  '/assist': typeof AuthAssistRoute
+  '/admin/dashboard': typeof AuthAdminDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/dashboard': typeof AuthDashboardRoute
+  '/admin': typeof AuthAdminRouteWithChildren
+  '/assist': typeof AuthAssistRoute
+  '/admin/dashboard': typeof AuthAdminDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/about': typeof AboutRoute
-  '/_auth/dashboard': typeof AuthDashboardRoute
+  '/_auth/admin': typeof AuthAdminRouteWithChildren
+  '/_auth/assist': typeof AuthAssistRoute
+  '/_auth/admin/dashboard': typeof AuthAdminDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/dashboard'
+  fullPaths: '/' | '/about' | '/admin' | '/assist' | '/admin/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/dashboard'
-  id: '__root__' | '/' | '/_auth' | '/about' | '/_auth/dashboard'
+  to: '/' | '/about' | '/admin' | '/assist' | '/admin/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/about'
+    | '/_auth/admin'
+    | '/_auth/assist'
+    | '/_auth/admin/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -88,22 +113,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/dashboard': {
-      id: '/_auth/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthDashboardRouteImport
+    '/_auth/assist': {
+      id: '/_auth/assist'
+      path: '/assist'
+      fullPath: '/assist'
+      preLoaderRoute: typeof AuthAssistRouteImport
       parentRoute: typeof AuthRoute
+    }
+    '/_auth/admin': {
+      id: '/_auth/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthAdminRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/admin/dashboard': {
+      id: '/_auth/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AuthAdminDashboardRouteImport
+      parentRoute: typeof AuthAdminRoute
     }
   }
 }
 
+interface AuthAdminRouteChildren {
+  AuthAdminDashboardRoute: typeof AuthAdminDashboardRoute
+}
+
+const AuthAdminRouteChildren: AuthAdminRouteChildren = {
+  AuthAdminDashboardRoute: AuthAdminDashboardRoute,
+}
+
+const AuthAdminRouteWithChildren = AuthAdminRoute._addFileChildren(
+  AuthAdminRouteChildren,
+)
+
 interface AuthRouteChildren {
-  AuthDashboardRoute: typeof AuthDashboardRoute
+  AuthAdminRoute: typeof AuthAdminRouteWithChildren
+  AuthAssistRoute: typeof AuthAssistRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthDashboardRoute: AuthDashboardRoute,
+  AuthAdminRoute: AuthAdminRouteWithChildren,
+  AuthAssistRoute: AuthAssistRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
