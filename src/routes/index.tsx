@@ -1,5 +1,5 @@
 import { ComponentExample } from "@/components/component-example";
-import { SignedIn, SignedOut, SignInButton, SignOutButton, SignUpButton, UserButton } from "@clerk/tanstack-react-start";
+import { SignedIn, SignedOut, SignInButton, SignOutButton, UserButton } from "@clerk/tanstack-react-start";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -14,7 +14,8 @@ function App() {
         <SignOutButton />
       </SignedIn>
       <SignedOut>
-        <SignInButton />     </SignedOut>
+        <SignInButton />
+      </SignedOut>
       <ComponentExample />
     </div>
   );
