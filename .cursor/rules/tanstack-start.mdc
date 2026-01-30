@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+- **Route loaders**: Use `ensureQueryData` in loader + `useSuspenseQuery` in component for initial page data
+- **Conditional queries**: Use `useQuery` with `convexQuery` for dialogs, filters, or user-triggered queries
+- **Never use**: `'use client'` directive or direct `convex.query()` in components (use React Query hooks instead)
